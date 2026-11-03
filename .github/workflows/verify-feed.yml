@@ -31,7 +31,7 @@ jobs:
           assert type(data['licenses']) is dict
           assert 'customer' not in raw.decode('utf-8').lower()
           for key, item in data['licenses'].items():
-              assert re.fullmatch(r'[A-F0-9]{32}',key)
+              assert re.fullmatch(r'[A-F0-9]{64}',key)
               assert set(item)=={'device','status','expires'}
               assert re.fullmatch(r'[A-F0-9]{64}',item['device'])
               assert item['status'] in ('active','suspended','revoked')
