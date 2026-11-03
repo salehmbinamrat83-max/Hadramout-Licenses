@@ -20,6 +20,7 @@ jobs:
         run: |
           python - <<'PY'
           import base64, json, re
+          from datetime import date
           from pathlib import Path
           from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
           raw=Path('docs/licenses.json').read_bytes()
@@ -33,8 +34,15 @@ jobs:
           for key, item in data['licenses'].items():
               assert re.fullmatch(r'[A-F0-9]{64}',key)
               assert set(item)=={'device','status','expires'}
-              assert re.fullmatch(r'[A-F0-9]{64}',item['device'])
-              assert item['status'] in ('active','suspended','revoked')
+              # A newly issued license is deliberately unbound until first use.
+              assert item['status'] in ('pending','active','suspended','revoked')
+              if item['status'] == 'pending':
+                  assert item['device'] is None
+              else:
+                  assert isinstance(item['device'],str) and re.fullmatch(r'[A-F0-9]{64}',item['device'])
+              expiry=item['expires']
+              assert expiry is None or (isinstance(expiry,str) and
+                  re.fullmatch(r'\d{4}-\d{2}-\d{2}',expiry) and date.fromisoformat(expiry))
           signature=base64.b64decode(data.pop('signature'),validate=True)
           public=base64.b64decode('3hSPo3JvQxHBbUdHhkds7r06gTLC/Nh9cmqo3R276qU=')
           canonical=json.dumps(data,ensure_ascii=False,sort_keys=True,separators=(',',':'),allow_nan=False).encode('utf-8')
