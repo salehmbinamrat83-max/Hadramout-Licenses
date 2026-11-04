@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-04T19:10:14.848319+00:00",
+  "generated_at": "2026-11-04T19:16:56.635115+00:00",
   "licenses": {
     "00FC6643AABF2DADEA28C5712AA8A051058DB830E1E5235FF90955AC7B9D63EC": {
       "device": null,
@@ -45,10 +45,15 @@
       "device": "92C477A184CCE8BF796BAD0D9140C590146FA38B2D5B4D976B8D0B299AC37FE2",
       "expires": "2027-12-03",
       "status": "active"
+    },
+    "EA58C45C200AFDFD41FB53D434FFEF0CF256BDC5C42520AA27DB4D9DB2F4358B": {
+      "device": null,
+      "expires": null,
+      "status": "pending"
     }
   },
   "product": "NIDI-MIKROTIK-CARDS",
-  "revision": 14,
+  "revision": 15,
   "schema": 1,
-  "signature": "SXoYuQfBj7EjK0pDlc74tRCu2MQZlQ5v+rHVfPLN2fH1b5pBrL1YMdzINVr6IP3KXS9RlZ4BUu9gzt6aVzJVBQ=="
+  "signature": "JY1lB4yN90DwXX0xt9Jf3oPSbIDaD15pecEDlWWHHMRbj0ReBTjSikYe9KC7Vu7h5KqeJCqITmrHhMc56C0DCw=="
 }
