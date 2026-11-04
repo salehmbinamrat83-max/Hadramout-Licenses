@@ -31,15 +31,21 @@ jobs:
           assert type(data['revision']) is int and data['revision']>=1
           assert type(data['licenses']) is dict
           assert 'customer' not in raw.decode('utf-8').lower()
+          def valid_binding(status, device):
+              if device is None:
+                  return status in ('pending', 'revoked')
+              return status in ('active', 'suspended', 'revoked') and isinstance(device, str) and bool(re.fullmatch(r'[A-F0-9]{64}', device))
+          # Isolated regressions: revocation before first use remains publishable.
+          for status in ('pending', 'active', 'suspended', 'revoked'):
+              assert valid_binding(status, None) == (status in ('pending', 'revoked'))
+              assert valid_binding(status, 'AB'*32) == (status != 'pending')
+              assert not valid_binding(status, 'invalid')
           for key, item in data['licenses'].items():
               assert re.fullmatch(r'[A-F0-9]{64}',key)
               assert set(item)=={'device','status','expires'}
               # A newly issued license is deliberately unbound until first use.
               assert item['status'] in ('pending','active','suspended','revoked')
-              if item['status'] == 'pending':
-                  assert item['device'] is None
-              else:
-                  assert isinstance(item['device'],str) and re.fullmatch(r'[A-F0-9]{64}',item['device'])
+              assert valid_binding(item['status'], item['device'])
               expiry=item['expires']
               assert expiry is None or (isinstance(expiry,str) and
                   re.fullmatch(r'\d{4}-\d{2}-\d{2}',expiry) and date.fromisoformat(expiry))
